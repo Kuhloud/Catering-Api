@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    web:
+        build:
+            context: .
+            dockerfile: PHP.Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www/html/
+            - ./apache-config/custom.conf:/etc/apache2/sites-available/000-default.conf
+        # environment:
+        # Add any environment variables here if needed
+        command: bash -c "a2enmod rewrite && apache2-foreground"
+#    php:
+#        build:
+#            context: .
+#            dockerfile: PHP.Dockerfile
+#        working_dir: /var/www/html/
+#        volumes:
+#            - ./:/var/www/html/
+    mariadb:
+        image: mariadb:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: secret123
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+            MYSQL_DATABASE: cateringdb
+        volumes:
+            - mysqldata:/var/lib/mysql
+            - ./sql:/docker-entrypoint-initdb.d
+        ports:
+            - 3306:3306
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        environment:
+            PMA_HOST: mariadb
+            PMA_USER: root
+            PMA_PASSWORD: secret123
+        ports:
+            - 8080:80
+
+volumes:
+    mysqldata: {}
