@@ -10,5 +10,4 @@ class Facility
     private string $name;
     private DateTime $creation_date;
     private Location $location;
-
 }

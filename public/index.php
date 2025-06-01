@@ -18,6 +18,7 @@ $router = require_once '../routes/router.php';
 
 // Run application through router:
 try {
+    //error_log("Registered Routes: " . print_r($router->getRoutes(), true));
     $router->run();
 } catch (\App\Plugins\Http\ApiException $e) {
     // Send the API exception to the client:

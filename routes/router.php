@@ -2,15 +2,19 @@
 
 use App\Plugins\Di\Factory;
 
-$di = Factory::getDi();
-$router = $di->getShared('router');
+try {
+    $di = Factory::getDi();
+    $router = $di->getShared('router');
+} catch (Exception $e) {
 
-//$router->setBasePath('/web_backend_test_catering_api');
+}
+
+$router->setBasePath('/web_backend_test_catering_api');
 
 require_once '../routes/routes.php';
 
 $router->set404(function () {
-    throw new \App\Plugins\Http\Exceptions\NotFound(['error' => 'Route not defined']);
+    throw new \App\Plugins\Http\Exceptions\NotFound(['error' => 'Route not defined', 'available_routes' => $GLOBALS['registered_routes'] ?? []]);
 });
 
 return $router;

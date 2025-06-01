@@ -10,16 +10,7 @@ services:
         volumes:
             - ./:/var/www/html/
             - ./apache-config/custom.conf:/etc/apache2/sites-available/000-default.conf
-        # environment:
-        # Add any environment variables here if needed
         command: bash -c "a2enmod rewrite && apache2-foreground"
-#    php:
-#        build:
-#            context: .
-#            dockerfile: PHP.Dockerfile
-#        working_dir: /var/www/html/
-#        volumes:
-#            - ./:/var/www/html/
     mariadb:
         image: mariadb:latest
         environment:

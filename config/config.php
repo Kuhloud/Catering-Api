@@ -2,6 +2,7 @@
 
 return [
     'db' => [
+        'type' => 'mysql',
         'host' => 'mariadb',
         'database' => 'cateringdb',
         'username' => 'root',
