@@ -6,7 +6,8 @@
 $router->get('/test', App\Controllers\IndexController::class . '@test');
 $router->get('/', App\Controllers\IndexController::class . '@test');
 $router->post('/facility', App\Controllers\FacilityController::class . '@createFacility');
-$router->put('/facility/{\d+}', App\Controllers\FacilityController::class . '@deleteFacility');
+$router->get('/facility/{\d+}', App\Controllers\FacilityController::class . '@readFacility');
+$router->put('/facility/{\d+}', App\Controllers\FacilityController::class . '@updateFacility');
 $router->delete('/facility/{\d+}', App\Controllers\FacilityController::class . '@deleteFacility');
 
 error_log("Registered Routes:\n" . print_r([

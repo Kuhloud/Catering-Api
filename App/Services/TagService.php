@@ -11,24 +11,33 @@ class TagService
     {
         $this->tagRepository = new TagRepository();
     }
-    public function createTag($tags)
+    private function createTags($tags)
     {
+        $existing_tags = $this->tagRepository->getTagByName($tags);
         $tag_ids = [];
         foreach ($tags as $tag) {
-            $existing_id = $this->tagRepository->getTagIdByName($tag);
-            if (!$existing_id) {
-                $tag_ids[] = $this->tagRepository->createTags($tag);
-            }
-            else {
-                $tag_ids[] = $existing_id;
+            if (!isset($existing_tags[$tag])) {
+                $tag_ids[] = $this->tagRepository->createTag($tag);
+            } else {
+                $tag_ids[] = $existing_tags[$tag];
             }
         }
         return $tag_ids;
     }
-    public function createFacilityTags($tag_ids, $new_facility_id)
+    public function getTagsByFacilityId($facility_id)
     {
+        return $this->tagRepository->getTagsByFacilityId($facility_id);
+    }
+    public function updateFacilityTags($tags, $facility_id)
+    {
+        $this->tagRepository->deleteFacilityTagsByFacility($facility_id);
+        $this->createFacilityTags($tags, $facility_id);
+    }
+    public function createFacilityTags($tags, $facility_id)
+    {
+        $tag_ids = $this->createTags($tags);
         foreach ($tag_ids as $tag_id) {
-            $this->tagRepository->createFacilityTags($tag_id, $new_facility_id);
+            $this->tagRepository->createFacilityTags($tag_id, $facility_id);
         }
     }
 }
