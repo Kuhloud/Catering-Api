@@ -11,14 +11,10 @@ use App\Plugins\Http\Response as Status;
 class FacilityController extends BaseController
 {
     private FacilityService $facilityService;
-    private LocationService $locationService;
-    private TagService $tagService;
 
     public function __construct()
     {
         $this->facilityService = new FacilityService();
-        $this->locationService = new LocationService();
-        $this->tagService = new TagService();
     }
 
     public function createFacility()
@@ -45,9 +41,17 @@ class FacilityController extends BaseController
             return;
         }
         $facility = $this->facilityService->readFacility($facility_id);
-        $facility->setLocation($this->locationService->readLocationByFacilityId($facility_id));
-        $facility->setTags($this->tagService->getTagsByFacilityId($facility_id));
         echo json_encode(['facility' => $facility]);
+    }
+    public function readFacilities()
+    {
+        if (!$this->isGet())
+        {
+            http_response_code(405); // Method Not Allowed
+            return;
+        }
+        $facilities = $this->facilityService->readFacilities();
+        echo json_encode(['facilities' => $facilities]);
     }
     public function updateFacility($facility_id)
     {

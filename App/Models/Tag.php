@@ -16,4 +16,14 @@ class Tag implements JsonSerializable
             'name' => $this->name,
         ];
     }
+
+    public function setTagId(int $tag_id): void
+    {
+        $this->tag_id = $tag_id;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 }

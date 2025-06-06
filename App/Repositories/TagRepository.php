@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Models\Tag;
 use PDO;
 
 class TagRepository extends Repository
 {
-    public function getTagByName($tag_names)
+    public function readTagIdByName($tag_names)
     {
         $placeholders = implode(',', array_fill(0, count($tag_names), '?'));
         $statement = $this->connection->prepare("SELECT tag_id, name FROM Tag WHERE name IN ($placeholders)");
@@ -16,14 +17,29 @@ class TagRepository extends Repository
         foreach ($rows as $row) {
             $result[$row['name']] = $row['tag_id'];
         }
-        return $result; // e.g. ['mexican' => 1, 'italian' => 2]
+        return $result;
     }
-    public function getTagsByFacilityId($facility_id)
+    public function readTagsByFacilityId($facility_id)
     {
         $statement = $this->connection->prepare("SELECT t.tag_id, t.name FROM Tag t JOIN Facility_Tag ft ON ft.tag_id = t.tag_id WHERE ft.facility_id = :facility_id");
         $statement->bindParam(':facility_id', $facility_id);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function readTagsByFacilityIds($facility_ids)
+    {
+        $placeholder = implode(',', array_fill(0, count($facility_ids), '?'));
+        $statement = $this->connection->prepare("SELECT ft.facility_id, t.tag_id, t.name FROM Tag t JOIN Facility_Tag ft ON ft.tag_id = t.tag_id WHERE ft.facility_id IN ($placeholder)");
+        $statement->execute($facility_ids);
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $result = [];
+        foreach ($rows as $row) {
+            $tag = new Tag();
+            $tag->setTagId($row['tag_id']);
+            $tag->setName($row['name']);
+            $result[$row['facility_id']][] = $tag;
+        }
+        return $result;
     }
     public function createTag($tag_name)
     {

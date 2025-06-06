@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Facility;
+use PDO;
 
 class FacilityRepository extends Repository
 {
@@ -22,6 +23,14 @@ class FacilityRepository extends Repository
         $statement->execute();
 
         return $statement->fetchObject(Facility::class);
+    }
+    public function readFacilities()
+    {
+        $statement = $this->connection->prepare("SELECT facility_id, name, creation_date FROM Facility");
+        $statement->execute();
+
+        //return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_CLASS, Facility::class);
     }
     public function updateFacility($facility_id, $facility_name, $location_id)
     {

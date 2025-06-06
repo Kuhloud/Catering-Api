@@ -16,6 +16,11 @@ class Facility implements JsonSerializable
      */
     private array $tags = [];
 
+    public function getFacilityId(): int
+    {
+        return $this->facility_id;
+    }
+
     public function setLocation(Location $location): void
     {
         $this->location = $location;

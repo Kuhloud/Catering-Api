@@ -15,4 +15,8 @@ class LocationService
     {
         return $this->locationRepository->readLocationByFacilityId($facility_id);
     }
+    public function readLocationsByFacilityIds($facility_ids)
+    {
+        return $this->locationRepository->readLocationsByFacilityIds($facility_ids);
+    }
 }

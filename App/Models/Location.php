@@ -23,4 +23,34 @@ class Location implements JsonSerializable
             'phone_number' => $this->phone_number,
         ];
     }
+
+    public function setPhoneNumber(string $phone_number): void
+    {
+        $this->phone_number = $phone_number;
+    }
+
+    public function setCountryCode(string $country_code): void
+    {
+        $this->country_code = $country_code;
+    }
+
+    public function setZipCode(string $zip_code): void
+    {
+        $this->zip_code = $zip_code;
+    }
+
+    public function setAddress(string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    public function setLocationId(int $location_id): void
+    {
+        $this->location_id = $location_id;
+    }
 }

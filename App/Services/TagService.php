@@ -13,7 +13,7 @@ class TagService
     }
     private function createTags($tags)
     {
-        $existing_tags = $this->tagRepository->getTagByName($tags);
+        $existing_tags = $this->tagRepository->readTagIdByName($tags);
         $tag_ids = [];
         foreach ($tags as $tag) {
             if (!isset($existing_tags[$tag])) {
@@ -24,9 +24,13 @@ class TagService
         }
         return $tag_ids;
     }
-    public function getTagsByFacilityId($facility_id)
+    public function readTagsByFacilityId($facility_id)
     {
-        return $this->tagRepository->getTagsByFacilityId($facility_id);
+        return $this->tagRepository->readTagsByFacilityId($facility_id);
+    }
+    public function readTagsByFacilityIds($facility_id)
+    {
+        return $this->tagRepository->readTagsByFacilityIds($facility_id);
     }
     public function updateFacilityTags($tags, $facility_id)
     {
