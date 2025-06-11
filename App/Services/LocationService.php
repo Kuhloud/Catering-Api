@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Location;
 use App\Repositories\LocationRepository;
 
 class LocationService
@@ -11,11 +12,14 @@ class LocationService
     {
         $this->locationRepository = new LocationRepository();
     }
-    public function readLocationByFacilityId($facility_id)
+    public function readLocationByFacilityId($facilityId): Location
     {
-        return $this->locationRepository->readLocationByFacilityId($facility_id);
+        return $this->locationRepository->readLocationByFacilityId($facilityId);
     }
-    public function readLocationsByFacilityIds($facility_ids)
+    /**
+     * @return Location[]
+     */
+    public function readLocationsByFacilityIds($facility_ids): array
     {
         return $this->locationRepository->readLocationsByFacilityIds($facility_ids);
     }

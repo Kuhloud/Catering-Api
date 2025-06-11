@@ -13,7 +13,7 @@ class Tag implements JsonSerializable
     {
         return [
             'tag_id' => $this->tag_id,
-            'name' => $this->name,
+            'name' => ucfirst($this->name),
         ];
     }
 

@@ -28,12 +28,6 @@ class BaseController extends Injectable {
         $json = file_get_contents('php://input');
         return json_decode($json);
     }
-    // Ik heb geleerd dat een associative array een array is waarbij de keys iets anders zijn dan objecten zijn.
-    protected function getJsonDataAsAssociativeArray()
-    {
-        $json = file_get_contents('php://input');
-        return json_decode($json, true);
-    }
     protected function returnResponseData($response)
     {
         return json_encode($response);

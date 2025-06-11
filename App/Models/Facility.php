@@ -25,7 +25,9 @@ class Facility implements JsonSerializable
     {
         $this->location = $location;
     }
-
+    /**
+     * @param Tag[] $tags
+     */
     public function setTags(array $tags): void
     {
         $this->tags = $tags;

@@ -9,7 +9,8 @@ try {
 
 }
 
-$router->setBasePath('/web_backend_test_catering_api');
+//$router->setBasePath('/web_backend_test_catering_api');
+$router->setBasePath('/catering');
 
 require_once '../routes/routes.php';
 

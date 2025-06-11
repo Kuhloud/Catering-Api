@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "5d0c696c-cf1c-4d0b-85b8-0a2c2a6b6837",
+		"name": "CateringCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44239274"
+	},
+	"item": [
+		{
+			"name": "New Request (POST)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "User-Agent",
+						"value": "insomnia/11.1.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Unreal Restaurant\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/catering/facility",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"catering",
+						"facility"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request (GET by ID)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "insomnia/11.1.0"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3b3V0ZXJAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfRU1QTE9ZRUUiLCJpYXQiOjE3NDg3MDA1MTksImV4cCI6MTc0ODcwNDExOX0.iquDBEDAYfK-tZDd287C0GitB6lvbB8hRWGrTMOb1U-C_N3cQDXnR-a5h9E80RyRNqLV1XEdSMtRev3brrFj8A"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/catering/facility/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"catering",
+						"facility",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "User-Agent",
+						"value": "insomnia/11.1.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Pakistani Restaurant\",\n\t\"location_id\": 2,\n\t\"tags\": [\"Pakistani\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/catering/facility/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"catering",
+						"facility",
+						"11"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request (GET all facilities)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "insomnia/11.1.0"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/catering/facilities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"catering",
+						"facilities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request (DELETE)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "insomnia/11.2.0"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/catering/facility/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"catering",
+						"facility",
+						"12"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

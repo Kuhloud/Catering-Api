@@ -13,35 +13,35 @@ class TagService
     }
     private function createTags($tags)
     {
-        $existing_tags = $this->tagRepository->readTagIdByName($tags);
-        $tag_ids = [];
+        $existingTags = $this->tagRepository->readTagIdByName($tags);
+        $tagIds = [];
         foreach ($tags as $tag) {
-            if (!isset($existing_tags[$tag])) {
-                $tag_ids[] = $this->tagRepository->createTag($tag);
+            if (!isset($existingTags[$tag])) {
+                $tagIds[] = $this->tagRepository->createTag($tag);
             } else {
-                $tag_ids[] = $existing_tags[$tag];
+                $tagIds[] = $existingTags[$tag];
             }
         }
-        return $tag_ids;
+        return $tagIds;
     }
-    public function readTagsByFacilityId($facility_id)
+    public function readTagsByFacilityId($facilityId)
     {
-        return $this->tagRepository->readTagsByFacilityId($facility_id);
+        return $this->tagRepository->readTagsByFacilityId($facilityId);
     }
-    public function readTagsByFacilityIds($facility_id)
+    public function readTagsByFacilityIds($facilityIds)
     {
-        return $this->tagRepository->readTagsByFacilityIds($facility_id);
+        return $this->tagRepository->readTagsByFacilityIds($facilityIds);
     }
-    public function updateFacilityTags($tags, $facility_id)
+    public function updateFacilityTags($tags, $facilityId)
     {
-        $this->tagRepository->deleteFacilityTagsByFacility($facility_id);
-        $this->createFacilityTags($tags, $facility_id);
+        $this->tagRepository->deleteFacilityTagsByFacility($facilityId);
+        $this->createFacilityTags($tags, $facilityId);
     }
-    public function createFacilityTags($tags, $facility_id)
+    public function createFacilityTags($tags, $facilityId)
     {
-        $tag_ids = $this->createTags($tags);
-        foreach ($tag_ids as $tag_id) {
-            $this->tagRepository->createFacilityTags($tag_id, $facility_id);
+        $tagIds = $this->createTags($tags);
+        foreach ($tagIds as $tagId) {
+            $this->tagRepository->createFacilityTags($tagId, $facilityId);
         }
     }
 }

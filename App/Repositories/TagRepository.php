@@ -7,11 +7,11 @@ use PDO;
 
 class TagRepository extends Repository
 {
-    public function readTagIdByName($tag_names)
+    public function readTagIdByName($tagNames)
     {
-        $placeholders = implode(',', array_fill(0, count($tag_names), '?'));
+        $placeholders = implode(',', array_fill(0, count($tagNames), '?'));
         $statement = $this->connection->prepare("SELECT tag_id, name FROM Tag WHERE name IN ($placeholders)");
-        $statement->execute($tag_names);
+        $statement->execute($tagNames);
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
         $result = [];
         foreach ($rows as $row) {
@@ -19,18 +19,18 @@ class TagRepository extends Repository
         }
         return $result;
     }
-    public function readTagsByFacilityId($facility_id)
+    public function readTagsByFacilityId($facilityId)
     {
         $statement = $this->connection->prepare("SELECT t.tag_id, t.name FROM Tag t JOIN Facility_Tag ft ON ft.tag_id = t.tag_id WHERE ft.facility_id = :facility_id");
-        $statement->bindParam(':facility_id', $facility_id);
+        $statement->bindParam(':facility_id', $facilityId);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function readTagsByFacilityIds($facility_ids)
+    public function readTagsByFacilityIds($facilityIds)
     {
-        $placeholder = implode(',', array_fill(0, count($facility_ids), '?'));
+        $placeholder = implode(',', array_fill(0, count($facilityIds), '?'));
         $statement = $this->connection->prepare("SELECT ft.facility_id, t.tag_id, t.name FROM Tag t JOIN Facility_Tag ft ON ft.tag_id = t.tag_id WHERE ft.facility_id IN ($placeholder)");
-        $statement->execute($facility_ids);
+        $statement->execute($facilityIds);
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
         $result = [];
         foreach ($rows as $row) {
@@ -41,31 +41,31 @@ class TagRepository extends Repository
         }
         return $result;
     }
-    public function createTag($tag_name)
+    public function createTag($tagName)
     {
         $statement = $this->connection->prepare("INSERT INTO Tag (name) VALUES (:name)");
-        $statement->bindParam(':name', $tag_name);
+        $statement->bindParam(':name', $tagName);
         $statement->execute();
 
         return $this->connection->lastInsertId();
     }
-    public function updateTag($tag_id, $tag_name)
+    public function updateTag($tagId, $tagName)
     {
         $statement = $this->connection->prepare("UPDATE Tag SET name = :name WHERE tag_id = :tag_id");
-        $statement->bindParam(':tag_id', $tag_id);
-        $statement->bindParam(':name', $tag_name);
+        $statement->bindParam(':tag_id', $tagId);
+        $statement->bindParam(':name', $tagName);
     }
-    public function createFacilityTags($tag_id, $facility_id)
+    public function createFacilityTags($tagId, $facilityId)
     {
         $statement = $this->connection->prepare("INSERT INTO Facility_Tag (tag_id, facility_id) VALUES (:tag_id, :facility_id)");
-        $statement->bindParam(':tag_id', $tag_id);
-        $statement->bindParam(':facility_id', $facility_id);
+        $statement->bindParam(':tag_id', $tagId);
+        $statement->bindParam(':facility_id', $facilityId);
         $statement->execute();
     }
-    public function deleteFacilityTagsByFacility($facility_id)
+    public function deleteFacilityTagsByFacility($facilityId)
     {
         $statement = $this->connection->prepare("DELETE FROM Facility_Tag WHERE facility_id = :facility_id");
-        $statement->bindParam(':facility_id', $facility_id);
+        $statement->bindParam(':facility_id', $facilityId);
         $statement->execute();
     }
 }
