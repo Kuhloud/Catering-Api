@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Gegenereerd op: 11 jun 2025 om 18:17
+-- Gegenereerd op: 13 jun 2025 om 14:28
 -- Serverversie: 11.7.2-MariaDB-ubu2404
 -- PHP-versie: 8.2.28
 
@@ -45,7 +45,8 @@ INSERT INTO `Facility` (`facility_id`, `name`, `creation_date`, `location_id`) V
 (7, 'Chinese Restaurant', '2025-06-01', 2),
 (9, 'Texan-Mexico', '2025-06-05', 1),
 (10, 'Indian Restaurant', '2025-06-11', 2),
-(11, 'Pakistani Restaurant', '2025-06-11', 2);
+(11, 'Pakistani Restaurant', '2025-06-11', 2),
+(13, 'Eisbein & Schweinhaxe', '2025-06-13', 2);
 
 -- --------------------------------------------------------
 
@@ -68,7 +69,8 @@ INSERT INTO `Facility_Tag` (`tag_id`, `facility_id`) VALUES
 (2, 7),
 (10, 9),
 (12, 10),
-(13, 11);
+(13, 11),
+(14, 13);
 
 -- --------------------------------------------------------
 
@@ -110,6 +112,7 @@ CREATE TABLE `Tag` (
 
 INSERT INTO `Tag` (`tag_id`, `name`) VALUES
 (2, 'chinese'),
+(14, 'german, pork'),
 (12, 'indian'),
 (1, 'mexican'),
 (13, 'pakistani'),
@@ -155,7 +158,7 @@ ALTER TABLE `Tag`
 -- AUTO_INCREMENT voor een tabel `Facility`
 --
 ALTER TABLE `Facility`
-  MODIFY `facility_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `facility_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT voor een tabel `Location`
@@ -167,7 +170,7 @@ ALTER TABLE `Location`
 -- AUTO_INCREMENT voor een tabel `Tag`
 --
 ALTER TABLE `Tag`
-  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Beperkingen voor geëxporteerde tabellen
