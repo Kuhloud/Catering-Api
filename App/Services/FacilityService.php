@@ -18,39 +18,46 @@ class FacilityService
         $this->locationService = new LocationService();
         $this->tagService = new TagService();
     }
-    public function createFacility($facilityName, $facilityLocation, $tags = null): Facility
+
+    /**
+     * @throws Exception
+     */
+    public function createFacility(string $facilityName, int $facilityLocation, ?array $tags = null): Facility
     {
         $facilityId = $this->facilityRepository->createFacility($facilityName, $facilityLocation);
         if (isset($tags))
         {
-            $tags = array_map('strtolower', $tags);
-            $this->tagService->updateFacilityTags($tags, $facilityId);
+            $tags = $this->convertTagsToLowerCase($tags);
+            $this->tagService->createFacilityTags($tags, $facilityId);
         }
         return $this->readFacility($facilityId);
     }
 
     /**
+     * Gets Location and Tags from their respective Services
      * @throws Exception
      */
-    public function readFacility($facilityId): Facility
+    public function readFacility(int $facilityId): Facility
     {
         if (!$this->facilityRepository->facilityExists($facilityId)) {
             throw new Exception("Facility not found");
         }
-        $facility = $this->facilityRepository->readFacility($facilityId);
-        $facility->setLocation($this->locationService->readLocationByFacilityId($facilityId));
-        $facility->setTags($this->tagService->readTagsByFacilityId($facilityId));
+        $facility = $this->facilityRepository->findFacilityByFacilityId($facilityId);
+        $facility->setLocation($this->locationService->findLocationByFacilityId($facilityId));
+        $facility->setTags($this->tagService->findTagsByFacilityId($facilityId));
         return $facility;
     }
     /**
+     *
+     * Gets Location and Tags from their respective Services
      * @return Facility[]
      */
     public function readFacilities(?string $facilityName = null, ?string $tagName = null, ?string $locationCity = null): array
     {
-        $facilities = $this->facilityRepository->readFacilities($facilityName, $tagName, $locationCity);
+        $facilities = $this->facilityRepository->findFacilitiesByFilter($facilityName, $tagName, $locationCity);
         $ids = array_map(fn($facility) => $facility->getFacilityId(), $facilities);
-        $locations = $this->locationService->readLocationsByFacilityIds($ids);
-        $tags = $this->tagService->readTagsByFacilityIds($ids);
+        $locations = $this->locationService->findLocationsByFacilityIds($ids);
+        $tags = $this->tagService->findTagsByFacilityIds($ids);
 
         foreach ($facilities as $facility) {
             $id = $facility->getFacilityId();
@@ -63,15 +70,15 @@ class FacilityService
     /**
      * @throws Exception
      */
-    public function updateFacility($facilityId, $facilityName, $locationId = null, $tags = null)
+    public function updateFacility(int $facilityId, string $facilityName, ?int $locationId = null, ?array $tags = null): ?Facility
     {
         if (!$this->facilityRepository->facilityExists($facilityId)) {
-            throw new Exception("Facility not found");
+            return null;
         }
         $this->facilityRepository->updateFacility($facilityId, $facilityName, $locationId);
         if (isset($tags))
         {
-            $tags = array_map('strtolower', $tags);
+            $tags = $this->convertTagsToLowerCase($tags);
             $this->tagService->updateFacilityTags($tags, $facilityId);
         }
         return $this->readFacility($facilityId);
@@ -80,8 +87,12 @@ class FacilityService
     /**
      * @throws Exception
      */
-    public function deleteFacility($facilityId): bool
+    public function deleteFacility(int $facilityId): bool
     {
         return $this->facilityRepository->deleteFacility($facilityId);
+    }
+    private function convertTagsToLowerCase(array $tags): array
+    {
+        return $tags ? array_map('strtolower', $tags) : [];
     }
 }

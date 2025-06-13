@@ -11,9 +11,12 @@ class TagService
     {
         $this->tagRepository = new TagRepository();
     }
-    private function createTags($tags)
+    /**
+     * Processes tag names and returns their IDs, creating new tags as needed.
+     */
+    private function createTags(array $tags): array
     {
-        $existingTags = $this->tagRepository->readTagIdByName($tags);
+        $existingTags = $this->tagRepository->findTagIdByName($tags);
         $tagIds = [];
         foreach ($tags as $tag) {
             if (!isset($existingTags[$tag])) {
@@ -24,20 +27,31 @@ class TagService
         }
         return $tagIds;
     }
-    public function readTagsByFacilityId($facilityId)
+    /**
+     * Gets all tags for a specific facility.
+     */
+    public function findTagsByFacilityId(int $facilityId): array
     {
-        return $this->tagRepository->readTagsByFacilityId($facilityId);
+        return $this->tagRepository->findTagsByFacilityId($facilityId);
     }
-    public function readTagsByFacilityIds($facilityIds)
+    /**
+     * Gets tags for multiple facilities in a single query.
+     *
+     * @return array<int, Tag[]> Map of facility IDs to their tags
+     */
+    public function findTagsByFacilityIds(array $facilityIds): array
     {
-        return $this->tagRepository->readTagsByFacilityIds($facilityIds);
+        return $this->tagRepository->findTagsByFacilityIds($facilityIds);
     }
-    public function updateFacilityTags($tags, $facilityId)
+    /**
+     * Deletes old Facility_Tag data in the database, and replaces them.
+     */
+    public function updateFacilityTags(array $tags, int $facilityId): void
     {
         $this->tagRepository->deleteFacilityTagsByFacility($facilityId);
         $this->createFacilityTags($tags, $facilityId);
     }
-    public function createFacilityTags($tags, $facilityId)
+    public function createFacilityTags(array $tags, int $facilityId): void
     {
         $tagIds = $this->createTags($tags);
         foreach ($tagIds as $tagId) {

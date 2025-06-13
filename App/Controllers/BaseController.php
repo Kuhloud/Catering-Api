@@ -28,29 +28,39 @@ class BaseController extends Injectable {
         $json = file_get_contents('php://input');
         return json_decode($json);
     }
-    protected function returnResponseData($response)
+    protected function sendSuccessResponse(): void
     {
-        return json_encode($response);
+        http_response_code(200);
     }
-    protected function returnErrorData()
+    protected function sendErrorResponse(string $message): void
     {
-        return json_encode(['error' => 'Data is not set']);
-    }
-    protected function filterString($string)
-    {
-        return $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-    }
-    protected function userCheckForImportantData()
-    {
-        if (!$this->isPost() ||!isset($_SESSION['account']) || !$_SESSION['account']->role == 'admin') {
-            return false;
-        }
-        return true;
-    }
-    protected function filterInt($int)
-    {
-        $int = filter_var($int, FILTER_VALIDATE_INT);
-        return filter_var($int, FILTER_SANITIZE_NUMBER_INT);
+        http_response_code(500);
+        $this->encodeErrorJson($message);
     }
 
+    protected function sendBadRequestResponse(string $message): void
+    {
+        http_response_code(400);
+        $this->encodeErrorJson($message);
+    }
+    protected function sendMethodNotAllowedResponse(string $message): void
+    {
+        http_response_code(405);
+        $this->encodeErrorJson($message);
+    }
+    protected function sendNotFoundResponse(string $message): void
+    {
+        http_response_code(404);
+        $this->encodeErrorJson($message);
+    }
+
+    protected function sendNoContentResponse(): void
+    {
+        http_response_code(204);
+    }
+    private function encodeErrorJson(string $message): void
+    {
+        header('Content-Type: application/json');
+        echo json_encode(['Error' => $message]);
+    }
 }

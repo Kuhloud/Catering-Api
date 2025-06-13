@@ -9,7 +9,7 @@ use PDOException;
 
 class FacilityRepository extends Repository
 {
-    public function createFacility($facilityName, $FacilityLocation)
+    public function createFacility($facilityName, $FacilityLocation): ?int
     {
         try {
             $statement = $this->connection->prepare("INSERT INTO Facility (name, location_id) VALUES (:name, :location_id)");
@@ -23,7 +23,7 @@ class FacilityRepository extends Repository
             return null;
         }
     }
-    public function readFacility($facilityId)
+    public function findFacilityByFacilityId($facilityId): ?Facility
     {
         try
         {
@@ -38,9 +38,18 @@ class FacilityRepository extends Repository
             return null;
         }
     }
-    public function readFacilities(?string $facilityName = null, ?string $tagNamr = null, ?string $locationCity = null): array
+    /**
+     * Retrieves facilities from the database that match the provided optional filters.
+     *
+     * @param string|null $facilityName   Filter facilities by name
+     * @param string|null $tagName        Filter facilities by tag name (note: typo in var name)
+     * @param string|null $locationCity   Filter facilities by location city
+     *
+     * @return Facility[] List of facilities that match the filters, or an empty array if an error occurs
+     */
+    public function findFacilitiesByFilter(?string $facilityName = null, ?string $tagName = null, ?string $locationCity = null): array
     {
-        $filters = $this->buildFilters($facilityName, $tagNamr, $locationCity);
+        $filters = $this->buildFilters($facilityName, $tagName, $locationCity);
         $sql = $this->buildFilterQuery($filters);
         try {
             $stmt = $this->connection->prepare($sql);
@@ -52,7 +61,7 @@ class FacilityRepository extends Repository
             return [];
         }
     }
-    public function updateFacility($facilityId, $FacilityName, $locationId)
+    public function updateFacility($facilityId, $FacilityName, $locationId): void
     {
         try {
             $statement = $this->connection->prepare("UPDATE Facility SET name = :name, location_id = :location_id WHERE facility_id = :facility_id");
@@ -79,6 +88,15 @@ class FacilityRepository extends Repository
             throw new Exception("Something went wrong");
         }
     }
+    /**
+     * Builds the SQL query string used to fetch facilities based on dynamic filters.
+     *
+     * @param array $filters Associative array with keys:
+     * - 'sql': string containing SQL WHERE clause additions
+     * - 'params': array of bound parameters for PDO
+     *
+     * @return string Full SQL query including dynamic filters and ordering
+     */
     private function buildFilterQuery(array $filters): string
     {
         $sql = "
@@ -91,6 +109,17 @@ class FacilityRepository extends Repository
     ";
         return $sql . $filters['sql'] . " ORDER BY f.facility_id";
     }
+    /**
+     * Constructs SQL filter conditions and parameter bindings for optional filters.
+     *
+     * @param string|null $facilityName   Filter by facility name (partial match)
+     * @param string|null $tagName        Filter by tag name (partial match)
+     * @param string|null $locationCity   Filter by location city (partial match)
+     *
+     * @return array An array containing:
+     * - 'sql': dynamically built WHERE clause additions
+     * - 'params': key-value pairs for PDO parameter binding
+     */
     private function buildFilters(?string $facilityName, ?string $tagName, ?string $locationCity): array
     {
         $filters = ['sql' => '', 'params' => []];

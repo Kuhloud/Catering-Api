@@ -7,20 +7,20 @@ use App\Repositories\LocationRepository;
 
 class LocationService
 {
-    private $locationRepository;
+    private LocationRepository $locationRepository;
     public function __construct()
     {
         $this->locationRepository = new LocationRepository();
     }
-    public function readLocationByFacilityId($facilityId): Location
+    public function findLocationByFacilityId(int $facilityId): Location
     {
-        return $this->locationRepository->readLocationByFacilityId($facilityId);
+        return $this->locationRepository->findLocationByFacilityId($facilityId);
     }
     /**
      * @return Location[]
      */
-    public function readLocationsByFacilityIds($facility_ids): array
+    public function findLocationsByFacilityIds(array $facilityIds): array
     {
-        return $this->locationRepository->readLocationsByFacilityIds($facility_ids);
+        return $this->locationRepository->findLocationsByFacilityIds($facilityIds);
     }
 }

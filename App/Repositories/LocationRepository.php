@@ -8,7 +8,7 @@ use PDOException;
 
 class LocationRepository extends Repository
 {
-    public function readLocationByFacilityId($facilityId)
+    public function findLocationByFacilityId(int $facilityId): ?Location
     {
         try {
             $statement = $this->connection->prepare("SELECT l.* FROM Location l JOIN Facility f ON f.location_id = l.location_id WHERE facility_id = :facility_id");
@@ -20,7 +20,7 @@ class LocationRepository extends Repository
             return null;
         }
     }
-    public function readLocationsByFacilityIds($facilityIds)
+    public function findLocationsByFacilityIds($facilityIds): array
     {
         try {
             $placeholders = implode(',', array_fill(0, count($facilityIds), '?'));

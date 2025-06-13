@@ -8,6 +8,7 @@ use App\Services\TagService;
 
 use App\Plugins\Http\Response as Status;
 use Exception;
+use InvalidArgumentException;
 
 class FacilityController extends BaseController
 {
@@ -22,94 +23,95 @@ class FacilityController extends BaseController
     {
         if (!$this->isPost())
         {
-            http_response_code(405); // Method Not Allowed
+            $this->sendMethodNotAllowedResponse("Method is not allowed"); // Method Not Allowed
             return;
         }
         $data = $this->getJsonDataAsObject();
         if (!$data || !isset($data->location_id)) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => 'Fill in all required fields']);
+            $this->sendBadRequestResponse('Fill in all required fields: name, location_id'); // Bad Request
             return;
         }
         try {
             {
                 $newFacility = $this->facilityService->createFacility($data->name, $data->location_id, $data->tags ?? null);
-                http_response_code(200); // OK
+                $this->sendSuccessResponse(); // OK
                 echo json_encode(['New Facility' => $newFacility]);
             }
         } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => "Could not create facility"]);
+            $this->sendErrorResponse('Could not create facility'); // Internal Server Error
         }
     }
     public function readFacility($facilityId)
     {
         if (!$this->isGet())
         {
-            http_response_code(405); // Method Not Allowed
+            $this->sendMethodNotAllowedResponse("Method is not allowed"); // Method Not Allowed
             return;
         }
         try {
             $facility = $this->facilityService->readFacility($facilityId);
-            http_response_code(200); // OK
+            $this->sendSuccessResponse(); // OK
             echo json_encode(['Facility' => $facility]);
         } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => $e->getMessage()]);
+            $this->sendErrorResponse('Could not read facility'); // Internal Server Error
         }
     }
     public function readFacilities()
     {
         if (!$this->isGet())
         {
-            http_response_code(405); // Method Not Allowed
+            $this->sendMethodNotAllowedResponse("Method is not allowed"); // Method Not Allowed
             return;
         }
         try {
             $facilities = $this->facilityService->readFacilities($_GET['name'] ?? null, $_GET['tag'] ?? null, $_GET['city'] ?? null);
-            http_response_code(200); // OK
+            $this->sendSuccessResponse(); // OK
             echo json_encode(['Facilities' => $facilities]);
         } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => "Could not read facilities"]);
+            $this->sendErrorResponse('Could not read facilities'); // Internal Server Error
         }
     }
     public function updateFacility($facilityId)
     {
         if (!$this->isPut())
         {
-            http_response_code(405); // Method Not Allowed
+            $this->sendMethodNotAllowedResponse("Method is not allowed"); // Method Not Allowed
             return;
         }
         $data = $this->getJsonDataAsObject();
         if (!$data) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => 'Nothing to update']);
+            $this->sendBadRequestResponse("Nothing to update"); // Internal Server Error
             return;
         }
         try {
             $updatedFacility = $this->facilityService->updateFacility($facilityId, $data->name ?? null, $data->location_id ?? null, $data->tags ?? null);
-            http_response_code(200); // OK
+            if (!$updatedFacility)
+            {
+                $this->sendNotFoundResponse('Facility not found'); // Not Found
+                return;
+            }
+            $this->sendSuccessResponse(); // OK
             echo json_encode(['Updated Facility' => $updatedFacility]);
         } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => $e->getMessage()]);
+            $this->sendErrorResponse('Could not update facility'); // Bad Request
         }
     }
-    public function deleteFacility($facilityId)
+    public function deleteFacility(int $facilityId): void
     {
-        if (!$this->isDelete())
-        {
-            http_response_code(405); // Method Not Allowed
+        if (!$this->isDelete()) {
+            $this->sendMethodNotAllowedResponse('Method is not allowed'); // Method Not Allowed
             return;
         }
         try {
-            $deletedFacility = $this->facilityService->deleteFacility($facilityId);
-            http_response_code(204); // No Content
-            echo json_encode(['Facility Deleted']);
+            $wasDeleted = $this->facilityService->deleteFacility($facilityId);
+
+            if (!$wasDeleted) {
+                $this->sendNotFoundResponse('Facility not found'); // Not Found
+                return;
+            }
+            $this->sendNoContentResponse();
         } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['Error' => "Could not delete facility"]);
+            $this->sendErrorResponse('Could not delete facility'); // Internal Server Error
         }
     }
 }
