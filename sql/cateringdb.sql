@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Gegenereerd op: 13 jun 2025 om 14:28
--- Serverversie: 11.7.2-MariaDB-ubu2404
+-- Gegenereerd op: 29 jun 2025 om 19:39
+-- Serverversie: 11.8.2-MariaDB-ubu2404
 -- PHP-versie: 8.2.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `Facility` (
-  `facility_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `creation_date` date NOT NULL DEFAULT current_timestamp(),
   `location_id` int(11) NOT NULL
@@ -38,7 +38,7 @@ CREATE TABLE `Facility` (
 -- Gegevens worden geëxporteerd voor tabel `Facility`
 --
 
-INSERT INTO `Facility` (`facility_id`, `name`, `creation_date`, `location_id`) VALUES
+INSERT INTO `Facility` (`id`, `name`, `creation_date`, `location_id`) VALUES
 (1, 'Authentico', '2025-05-28', 1),
 (2, 'Tasty Two', '2025-05-28', 1),
 (4, 'Vegan Restaurant', '2025-06-01', 2),
@@ -46,7 +46,13 @@ INSERT INTO `Facility` (`facility_id`, `name`, `creation_date`, `location_id`) V
 (9, 'Texan-Mexico', '2025-06-05', 1),
 (10, 'Indian Restaurant', '2025-06-11', 2),
 (11, 'Pakistani Restaurant', '2025-06-11', 2),
-(13, 'Eisbein & Schweinhaxe', '2025-06-13', 2);
+(13, 'Eisbein & Schweinhaxe', '2025-06-13', 2),
+(15, 'Eisbein & Schweinhaxe', '2025-06-22', 2),
+(16, 'Food', '2025-06-22', 2),
+(17, 'Food', '2025-06-22', 2),
+(18, 'Unreal Restaurant', '2025-06-29', 2),
+(20, 'Plastic Restaurant', '2025-06-29', 2),
+(21, 'Pyongyang Restaurant', '2025-06-29', 2);
 
 -- --------------------------------------------------------
 
@@ -70,7 +76,11 @@ INSERT INTO `Facility_Tag` (`tag_id`, `facility_id`) VALUES
 (10, 9),
 (12, 10),
 (13, 11),
-(14, 13);
+(14, 13),
+(15, 17),
+(16, 20),
+(17, 20),
+(18, 21);
 
 -- --------------------------------------------------------
 
@@ -79,7 +89,7 @@ INSERT INTO `Facility_Tag` (`tag_id`, `facility_id`) VALUES
 --
 
 CREATE TABLE `Location` (
-  `location_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `city` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `zip_code` varchar(12) NOT NULL,
@@ -91,7 +101,7 @@ CREATE TABLE `Location` (
 -- Gegevens worden geëxporteerd voor tabel `Location`
 --
 
-INSERT INTO `Location` (`location_id`, `city`, `address`, `zip_code`, `country_code`, `phone_number`) VALUES
+INSERT INTO `Location` (`id`, `city`, `address`, `zip_code`, `country_code`, `phone_number`) VALUES
 (1, 'Amsterdam', 'Sint Nicolaasstraat 9', '1012 NJ', 'NL', '+31 25 341 5818'),
 (2, 'Den Haag', 'Willekeurigestraat 11', '8347 JS', 'NL', '+31 23 544 3294');
 
@@ -102,7 +112,7 @@ INSERT INTO `Location` (`location_id`, `city`, `address`, `zip_code`, `country_c
 --
 
 CREATE TABLE `Tag` (
-  `tag_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -110,13 +120,17 @@ CREATE TABLE `Tag` (
 -- Gegevens worden geëxporteerd voor tabel `Tag`
 --
 
-INSERT INTO `Tag` (`tag_id`, `name`) VALUES
+INSERT INTO `Tag` (`id`, `name`) VALUES
 (2, 'chinese'),
+(17, 'garbage'),
 (14, 'german, pork'),
 (12, 'indian'),
 (1, 'mexican'),
+(18, 'north korean'),
 (13, 'pakistani'),
+(16, 'plastic'),
 (10, 'tex-mex'),
+(15, 'veal, lamb'),
 (11, 'vegan');
 
 --
@@ -127,7 +141,7 @@ INSERT INTO `Tag` (`tag_id`, `name`) VALUES
 -- Indexen voor tabel `Facility`
 --
 ALTER TABLE `Facility`
-  ADD PRIMARY KEY (`facility_id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `location_id` (`location_id`);
 
 --
@@ -141,13 +155,13 @@ ALTER TABLE `Facility_Tag`
 -- Indexen voor tabel `Location`
 --
 ALTER TABLE `Location`
-  ADD PRIMARY KEY (`location_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexen voor tabel `Tag`
 --
 ALTER TABLE `Tag`
-  ADD PRIMARY KEY (`tag_id`),
+  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
@@ -158,19 +172,19 @@ ALTER TABLE `Tag`
 -- AUTO_INCREMENT voor een tabel `Facility`
 --
 ALTER TABLE `Facility`
-  MODIFY `facility_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT voor een tabel `Location`
 --
 ALTER TABLE `Location`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT voor een tabel `Tag`
 --
 ALTER TABLE `Tag`
-  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Beperkingen voor geëxporteerde tabellen
@@ -180,14 +194,14 @@ ALTER TABLE `Tag`
 -- Beperkingen voor tabel `Facility`
 --
 ALTER TABLE `Facility`
-  ADD CONSTRAINT `location_id` FOREIGN KEY (`location_id`) REFERENCES `Location` (`location_id`);
+  ADD CONSTRAINT `location_id` FOREIGN KEY (`location_id`) REFERENCES `Location` (`id`);
 
 --
 -- Beperkingen voor tabel `Facility_Tag`
 --
 ALTER TABLE `Facility_Tag`
-  ADD CONSTRAINT `Facility_Tag_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`tag_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `Facility_Tag_ibfk_2` FOREIGN KEY (`facility_id`) REFERENCES `Facility` (`facility_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `facility_id` FOREIGN KEY (`facility_id`) REFERENCES `Facility` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tag_id` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

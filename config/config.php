@@ -3,7 +3,7 @@
 return [
     'db' => [
         'type' => 'mysql',
-        'host' => 'mariadb',
+        'host' => 'localhost',
         'database' => 'cateringdb',
         'username' => 'root',
         'password' => 'secret123',

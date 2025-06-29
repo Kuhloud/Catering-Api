@@ -9,7 +9,14 @@ use PDOException;
 
 class FacilityRepository extends Repository
 {
-    public function createFacility($facilityName, $FacilityLocation): ?int
+    /**
+     * Creates a new facility with name and locationId.
+     *
+     * @param string $facilityName
+     * @param int $FacilityLocation
+     * @return int
+     */
+    public function createFacility(string $facilityName, int $FacilityLocation): ?int
     {
         try {
             $statement = $this->connection->prepare("INSERT INTO Facility (name, location_id) VALUES (:name, :location_id)");
@@ -23,11 +30,18 @@ class FacilityRepository extends Repository
             return null;
         }
     }
-    public function findFacilityByFacilityId($facilityId): ?Facility
+
+    /**
+     * Retrieves facility from the database that match the provided facilityId.
+     *
+     * @param int $facilityId   Find facility by ID
+     *
+     */
+    public function findFacilityByFacilityId(int $facilityId): ?Facility
     {
         try
         {
-            $statement = $this->connection->prepare("SELECT facility_id, name, creation_date FROM Facility WHERE facility_id = :facility_id");
+            $statement = $this->connection->prepare("SELECT id, name, creation_date FROM Facility WHERE id = :facility_id");
             $statement->bindParam(':facility_id', $facilityId);
             $statement->execute();
 
@@ -38,11 +52,12 @@ class FacilityRepository extends Repository
             return null;
         }
     }
+
     /**
      * Retrieves facilities from the database that match the provided optional filters.
      *
      * @param string|null $facilityName   Filter facilities by name
-     * @param string|null $tagName        Filter facilities by tag name (note: typo in var name)
+     * @param string|null $tagName        Filter facilities by tag name
      * @param string|null $locationCity   Filter facilities by location city
      *
      * @return Facility[] List of facilities that match the filters, or an empty array if an error occurs
@@ -61,13 +76,21 @@ class FacilityRepository extends Repository
             return [];
         }
     }
-    public function updateFacility($facilityId, $FacilityName, $locationId): void
+
+    /**
+     * Updates an existing facility with name and locationId.
+     *
+     * @param int $facilityId
+     * @param string $facilityName
+     * @param int $locationId
+     */
+    public function updateFacility(int $facilityId, string $facilityName, int $locationId): void
     {
         try {
-            $statement = $this->connection->prepare("UPDATE Facility SET name = :name, location_id = :location_id WHERE facility_id = :facility_id");
+            $statement = $this->connection->prepare("UPDATE Facility SET name = :name, location_id = :location_id WHERE id = :facility_id");
             $statement->bindParam(':facility_id', $facilityId);
             $statement->bindParam(':location_id', $locationId);
-            $statement->bindParam(':name', $FacilityName);
+            $statement->bindParam(':name', $facilityName);
             $statement->execute();
         } catch (PDOException $e) {
             throw new PDOException("Could not update facility");
@@ -75,12 +98,16 @@ class FacilityRepository extends Repository
     }
 
     /**
+     *  Deletes an existing facility with facilityId.
+     *
+     * @param int $facilityId
+     * @return bool
      * @throws Exception
      */
-    public function deleteFacility($facilityId)
+    public function deleteFacility(int $facilityId): bool
     {
         try {
-            $statement = $this->connection->prepare("DELETE FROM Facility WHERE facility_id = :facility_id");
+            $statement = $this->connection->prepare("DELETE FROM Facility WHERE id = :facility_id");
             $statement->bindParam(':facility_id', $facilityId);
             $statement->execute();
             return $statement->rowCount() > 0;
@@ -88,6 +115,7 @@ class FacilityRepository extends Repository
             throw new Exception("Something went wrong");
         }
     }
+
     /**
      * Builds the SQL query string used to fetch facilities based on dynamic filters.
      *
@@ -100,15 +128,16 @@ class FacilityRepository extends Repository
     private function buildFilterQuery(array $filters): string
     {
         $sql = "
-        SELECT DISTINCT f.facility_id, f.name, f.creation_date
+        SELECT DISTINCT f.id, f.name, f.creation_date
         FROM Facility f
-        JOIN Location l ON f.location_id = l.location_id
-        LEFT JOIN Facility_Tag ft ON f.facility_id = ft.facility_id
-        LEFT JOIN Tag t ON ft.tag_id = t.tag_id
+        JOIN Location l ON f.location_id = l.id
+        LEFT JOIN Facility_Tag ft ON f.id = ft.facility_id
+        LEFT JOIN Tag t ON ft.tag_id = t.id
         WHERE 1 = 1
     ";
-        return $sql . $filters['sql'] . " ORDER BY f.facility_id";
+        return $sql . $filters['sql'] . " ORDER BY f.id";
     }
+
     /**
      * Constructs SQL filter conditions and parameter bindings for optional filters.
      *
@@ -134,10 +163,17 @@ class FacilityRepository extends Repository
         }
         return $filters;
     }
-    public function facilityExists($facilityId): bool
+
+    /**
+     * Checks if a facility with the facilityId exists.
+     *
+     * @param int $facilityId
+     * @return bool
+     */
+    public function facilityExists(int $facilityId): bool
     {
         try {
-            $statement = $this->connection->prepare("SELECT COUNT(*) FROM Facility WHERE facility_id = :facility_id");
+            $statement = $this->connection->prepare("SELECT COUNT(*) FROM Facility WHERE id = :facility_id");
             $statement->bindParam(':facility_id', $facilityId);
             $statement->execute();
             return $statement->fetchColumn();

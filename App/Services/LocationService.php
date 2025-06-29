@@ -12,11 +12,17 @@ class LocationService
     {
         $this->locationRepository = new LocationRepository();
     }
+
+    /**
+     * Finds location with the facilityId
+     */
     public function findLocationByFacilityId(int $facilityId): Location
     {
         return $this->locationRepository->findLocationByFacilityId($facilityId);
     }
+
     /**
+     * Finds location for facilities with multiple facilityIds
      * @return Location[]
      */
     public function findLocationsByFacilityIds(array $facilityIds): array

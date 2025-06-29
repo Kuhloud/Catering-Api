@@ -19,6 +19,10 @@ class FacilityController extends BaseController
         $this->facilityService = new FacilityService();
     }
 
+    /**
+     * Creates a new facility
+     * @return void
+     */
     public function createFacility()
     {
         if (!$this->isPost())
@@ -41,6 +45,13 @@ class FacilityController extends BaseController
             $this->sendErrorResponse('Could not create facility'); // Internal Server Error
         }
     }
+
+    /**
+     * Finds a facility with facilityId
+     *
+     * @param $facilityId
+     * @return void
+     */
     public function readFacility($facilityId)
     {
         if (!$this->isGet())
@@ -56,6 +67,11 @@ class FacilityController extends BaseController
             $this->sendErrorResponse('Could not read facility'); // Internal Server Error
         }
     }
+
+    /**
+     * Finds multiple facilities. Can be used with filters
+     * @return void
+     */
     public function readFacilities()
     {
         if (!$this->isGet())
@@ -66,11 +82,18 @@ class FacilityController extends BaseController
         try {
             $facilities = $this->facilityService->readFacilities($_GET['name'] ?? null, $_GET['tag'] ?? null, $_GET['city'] ?? null);
             $this->sendSuccessResponse(); // OK
-            echo json_encode(['Facilities' => $facilities]);
+            echo json_encode($facilities);
         } catch (Exception $e) {
             $this->sendErrorResponse('Could not read facilities'); // Internal Server Error
         }
     }
+
+    /**
+     * Updates an existing facility. Name, location, and tags are optional.
+     *
+     * @param $facilityId
+     * @return void
+     */
     public function updateFacility($facilityId)
     {
         if (!$this->isPut())
@@ -96,6 +119,13 @@ class FacilityController extends BaseController
             $this->sendErrorResponse('Could not update facility'); // Bad Request
         }
     }
+
+    /**
+     * Deletes an existing facility with facilityId
+     *
+     * @param int $facilityId
+     * @return void
+     */
     public function deleteFacility(int $facilityId): void
     {
         if (!$this->isDelete()) {
@@ -114,4 +144,14 @@ class FacilityController extends BaseController
             $this->sendErrorResponse('Could not delete facility'); // Internal Server Error
         }
     }
+
+    /**
+     * Sets FacilityService for tests
+     *
+     */
+    public function setFacilityServiceForTests(FacilityService $service): void
+    {
+        $this->facilityService = $service;
+    }
+
 }
