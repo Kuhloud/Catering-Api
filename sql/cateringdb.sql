@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Gegenereerd op: 13 jun 2025 om 14:28
--- Serverversie: 11.7.2-MariaDB-ubu2404
+-- Gegenereerd op: 29 jun 2025 om 19:39
+-- Serverversie: 11.8.2-MariaDB-ubu2404
 -- PHP-versie: 8.2.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -46,7 +46,13 @@ INSERT INTO `Facility` (`id`, `name`, `creation_date`, `location_id`) VALUES
 (9, 'Texan-Mexico', '2025-06-05', 1),
 (10, 'Indian Restaurant', '2025-06-11', 2),
 (11, 'Pakistani Restaurant', '2025-06-11', 2),
-(13, 'Eisbein & Schweinhaxe', '2025-06-13', 2);
+(13, 'Eisbein & Schweinhaxe', '2025-06-13', 2),
+(15, 'Eisbein & Schweinhaxe', '2025-06-22', 2),
+(16, 'Food', '2025-06-22', 2),
+(17, 'Food', '2025-06-22', 2),
+(18, 'Unreal Restaurant', '2025-06-29', 2),
+(20, 'Plastic Restaurant', '2025-06-29', 2),
+(21, 'Pyongyang Restaurant', '2025-06-29', 2);
 
 -- --------------------------------------------------------
 
@@ -70,7 +76,11 @@ INSERT INTO `Facility_Tag` (`tag_id`, `facility_id`) VALUES
 (10, 9),
 (12, 10),
 (13, 11),
-(14, 13);
+(14, 13),
+(15, 17),
+(16, 20),
+(17, 20),
+(18, 21);
 
 -- --------------------------------------------------------
 
@@ -112,11 +122,15 @@ CREATE TABLE `Tag` (
 
 INSERT INTO `Tag` (`id`, `name`) VALUES
 (2, 'chinese'),
+(17, 'garbage'),
 (14, 'german, pork'),
 (12, 'indian'),
 (1, 'mexican'),
+(18, 'north korean'),
 (13, 'pakistani'),
+(16, 'plastic'),
 (10, 'tex-mex'),
+(15, 'veal, lamb'),
 (11, 'vegan');
 
 --
@@ -158,7 +172,7 @@ ALTER TABLE `Tag`
 -- AUTO_INCREMENT voor een tabel `Facility`
 --
 ALTER TABLE `Facility`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT voor een tabel `Location`
@@ -170,7 +184,7 @@ ALTER TABLE `Location`
 -- AUTO_INCREMENT voor een tabel `Tag`
 --
 ALTER TABLE `Tag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Beperkingen voor geëxporteerde tabellen
@@ -186,8 +200,8 @@ ALTER TABLE `Facility`
 -- Beperkingen voor tabel `Facility_Tag`
 --
 ALTER TABLE `Facility_Tag`
-  ADD CONSTRAINT `tag_id` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `facility_id` FOREIGN KEY (`facility_id`) REFERENCES `Facility` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `facility_id` FOREIGN KEY (`facility_id`) REFERENCES `Facility` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tag_id` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
