@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Facility_Tag
+class FacilityTag
 {
     private int $tagId;
     private int $facilityId;

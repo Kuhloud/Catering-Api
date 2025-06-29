@@ -6,20 +6,20 @@ use JsonSerializable;
 
 class Tag implements JsonSerializable
 {
-    private int $tag_id;
+    private int $id;
     private string $name;
 
     public function jsonSerialize(): array
     {
         return [
-            'tag_id' => $this->tag_id,
+            'tag_id' => $this->id,
             'name' => ucfirst($this->name),
         ];
     }
 
-    public function setTagId(int $tag_id): void
+    public function setId(int $id): void
     {
-        $this->tag_id = $tag_id;
+        $this->id = $id;
     }
 
     public function setName(string $name): void

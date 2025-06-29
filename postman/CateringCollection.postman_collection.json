@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "New Request (POST)",
+			"name": "Create Facility (POST)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -22,7 +22,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Unreal Restaurant\"\n}",
+					"raw": "{\n\t\"name\": \"Plastic Restaurant\",\n\t\"location_id\": 2,\n\t\"tags\": [\"Plastic\", \"Garbage\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -30,10 +30,9 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/catering/facility",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/catering/facility",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"catering",
@@ -44,7 +43,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request (GET by ID)",
+			"name": "Get Facility by ID (GET by ID)",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -58,22 +57,21 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost/catering/facility/5",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/catering/facility/13",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"catering",
 						"facility",
-						"5"
+						"13"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "New Request (PUT)",
+			"name": "Update Facility (PUT)",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -88,7 +86,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Pakistani Restaurant\",\n\t\"location_id\": 2,\n\t\"tags\": [\"Pakistani\"]\n}",
+					"raw": "{\n\t\"name\": \"Unreal Restaurant\",\n\t\"location_id\": 2,\n\t\"tags\": null\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -96,22 +94,21 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/catering/facility/11",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/catering/facility/18",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"catering",
 						"facility",
-						"11"
+						"18"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "New Request (GET all facilities)",
+			"name": "Get Facilities (GET all facilities)",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -121,10 +118,9 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost/catering/facilities",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/catering/facilities",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"catering",
@@ -135,7 +131,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request (DELETE)",
+			"name": "Delete Facility (DELETE)",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -145,25 +141,80 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost/catering/facility/12",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/catering/facility/19",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"catering",
 						"facility",
-						"12"
+						"19"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Get Facility with Filter Facility Found(GET by params))",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/catering/facilities?city=den&name=ch&tag=chi",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"catering",
+						"facilities"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "den"
+						},
+						{
+							"key": "name",
+							"value": "ch"
+						},
+						{
+							"key": "tag",
+							"value": "chi"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Facility with Filter No Facilities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/catering/facilities?city=am&name=fg&tag=veg",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"catering",
+						"facilities"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "am"
+						},
+						{
+							"key": "name",
+							"value": "fg"
+						},
+						{
+							"key": "tag",
+							"value": "veg"
+						}
+					]
+				}
 			},
 			"response": []
 		}

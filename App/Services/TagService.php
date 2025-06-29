@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Tag;
 use App\Repositories\TagRepository;
 
 class TagService
@@ -11,12 +12,13 @@ class TagService
     {
         $this->tagRepository = new TagRepository();
     }
+
     /**
      * Processes tag names and returns their IDs, creating new tags as needed.
      */
     private function createTags(array $tags): array
     {
-        $existingTags = $this->tagRepository->findTagIdByName($tags);
+        $existingTags = $this->tagRepository->findTagIdsByName($tags);
         $tagIds = [];
         foreach ($tags as $tag) {
             if (!isset($existingTags[$tag])) {
@@ -27,6 +29,7 @@ class TagService
         }
         return $tagIds;
     }
+
     /**
      * Gets all tags for a specific facility.
      */
@@ -34,6 +37,7 @@ class TagService
     {
         return $this->tagRepository->findTagsByFacilityId($facilityId);
     }
+
     /**
      * Gets tags for multiple facilities in a single query.
      *
@@ -43,14 +47,22 @@ class TagService
     {
         return $this->tagRepository->findTagsByFacilityIds($facilityIds);
     }
+
     /**
      * Deletes old Facility_Tag data in the database, and replaces them.
      */
     public function updateFacilityTags(array $tags, int $facilityId): void
     {
         $this->tagRepository->deleteFacilityTagsByFacility($facilityId);
+        if (empty($tags)) {
+            return;
+        }
         $this->createFacilityTags($tags, $facilityId);
     }
+
+    /**
+     * Creates new tags first, then adds it to a junction table with the facilityId.
+     */
     public function createFacilityTags(array $tags, int $facilityId): void
     {
         $tagIds = $this->createTags($tags);
@@ -58,4 +70,5 @@ class TagService
             $this->tagRepository->createFacilityTags($tagId, $facilityId);
         }
     }
+
 }

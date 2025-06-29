@@ -6,7 +6,7 @@ use App\Models\Facility;
 use App\Repositories\FacilityRepository;
 use Exception;
 
-class FacilityService
+class FacilityService extends BaseService
 {
     private FacilityRepository $facilityRepository;
     private LocationService $locationService;
@@ -20,6 +20,7 @@ class FacilityService
     }
 
     /**
+     * Creates a new facility with a name and locationId. Tags can also be optionally added.
      * @throws Exception
      */
     public function createFacility(string $facilityName, int $facilityLocation, ?array $tags = null): Facility
@@ -47,6 +48,7 @@ class FacilityService
         $facility->setTags($this->tagService->findTagsByFacilityId($facilityId));
         return $facility;
     }
+
     /**
      *
      * Gets Location and Tags from their respective Services
@@ -55,12 +57,25 @@ class FacilityService
     public function readFacilities(?string $facilityName = null, ?string $tagName = null, ?string $locationCity = null): array
     {
         $facilities = $this->facilityRepository->findFacilitiesByFilter($facilityName, $tagName, $locationCity);
-        $ids = array_map(fn($facility) => $facility->getFacilityId(), $facilities);
+        if (empty($facilities)) {
+            return [];
+        }
+        return $this->convertFacilitiesToFacilityObject($facilities);
+    }
+
+    /**
+     * Coverts the ids of $facilities and uses it to fetch locations and tags for each id.
+     * Then the data gets turned into an array of Facility objects.
+     * @return Facility[]
+     */
+    private function convertFacilitiesToFacilityObject(array $facilities): array
+    {
+        $ids = array_map(fn($facility) => $facility->getId(), $facilities);
         $locations = $this->locationService->findLocationsByFacilityIds($ids);
         $tags = $this->tagService->findTagsByFacilityIds($ids);
 
         foreach ($facilities as $facility) {
-            $id = $facility->getFacilityId();
+            $id = $facility->getId();
             $facility->setLocation($locations[$id]);
             $facility->setTags($tags[$id] ?? []);
         }
@@ -68,6 +83,7 @@ class FacilityService
     }
 
     /**
+     * Updates a facility with a body with optional name, location, and optional tags via a facilityId
      * @throws Exception
      */
     public function updateFacility(int $facilityId, string $facilityName, ?int $locationId = null, ?array $tags = null): ?Facility
@@ -76,23 +92,18 @@ class FacilityService
             return null;
         }
         $this->facilityRepository->updateFacility($facilityId, $facilityName, $locationId);
-        if (isset($tags))
-        {
-            $tags = $this->convertTagsToLowerCase($tags);
-            $this->tagService->updateFacilityTags($tags, $facilityId);
-        }
+        $tags = $this->convertTagsToLowerCase($tags);
+        $this->tagService->updateFacilityTags($tags, $facilityId);
         return $this->readFacility($facilityId);
     }
 
     /**
+     * Deletes a facility with facilityId
      * @throws Exception
      */
     public function deleteFacility(int $facilityId): bool
     {
         return $this->facilityRepository->deleteFacility($facilityId);
     }
-    private function convertTagsToLowerCase(array $tags): array
-    {
-        return $tags ? array_map('strtolower', $tags) : [];
-    }
+
 }

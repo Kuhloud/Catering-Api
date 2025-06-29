@@ -6,7 +6,7 @@ use JsonSerializable;
 
 class Location implements JsonSerializable
 {
-    private int $location_id;
+    private int $id;
     private string $city;
     private string $address;
     private string $zip_code;
@@ -16,7 +16,7 @@ class Location implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'location_id' => $this->location_id,
+            'location_id' => $this->id,
             'city' => $this->city,
             'zip_code' => $this->zip_code,
             'country_code' => $this->country_code,
@@ -49,8 +49,8 @@ class Location implements JsonSerializable
         $this->city = $city;
     }
 
-    public function setLocationId(int $location_id): void
+    public function setId(int $id): void
     {
-        $this->location_id = $location_id;
+        $this->id = $id;
     }
 }
