@@ -13,5 +13,4 @@
 .idea
 # Vendor
 /vendor
-# Environmental File
-/app/.env
+

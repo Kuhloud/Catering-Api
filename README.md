@@ -8,3 +8,6 @@ Setup instructions:
 4. API available at http://localhost/catering/
 5. API endpoints can be tested by importing the json in the postman map to postman.
 
+Test instructions:
+In the Terminal, run `docker compose run web ./vendor/bin/phpunit --configuration tests/phpunit.xml`
+
