@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use DateTime;
 use JsonSerializable;
 
 class Facility implements JsonSerializable
@@ -19,6 +18,41 @@ class Facility implements JsonSerializable
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setCreationDate(string $creation_date): void
+    {
+        $this->creation_date = $creation_date;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getCreationDate(): string
+    {
+        return $this->creation_date;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
     }
 
     public function setLocation(Location $location): void

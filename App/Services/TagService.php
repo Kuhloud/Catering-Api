@@ -16,7 +16,7 @@ class TagService
     /**
      * Processes tag names and returns their IDs, creating new tags as needed.
      */
-    private function createTags(array $tags): array
+    public function createTags(array $tags): array
     {
         $existingTags = $this->tagRepository->findTagIdsByName($tags);
         $tagIds = [];

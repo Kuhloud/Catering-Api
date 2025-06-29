@@ -145,4 +145,13 @@ class FacilityController extends BaseController
         }
     }
 
+    /**
+     * Sets FacilityService for tests
+     *
+     */
+    public function setFacilityServiceForTests(FacilityService $service): void
+    {
+        $this->facilityService = $service;
+    }
+
 }

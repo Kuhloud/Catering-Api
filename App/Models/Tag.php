@@ -9,12 +9,9 @@ class Tag implements JsonSerializable
     private int $id;
     private string $name;
 
-    public function jsonSerialize(): array
+    public function getId(): int
     {
-        return [
-            'tag_id' => $this->id,
-            'name' => ucfirst($this->name),
-        ];
+        return $this->id;
     }
 
     public function setId(int $id): void
@@ -22,8 +19,21 @@ class Tag implements JsonSerializable
         $this->id = $id;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'tag_id' => $this->id,
+            'name' => ucfirst($this->name),
+        ];
     }
 }
